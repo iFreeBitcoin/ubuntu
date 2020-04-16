@@ -311,8 +311,6 @@ app.post('/check', urlencodedParser, function(req, res) {
 
             }, req.body);
 
-            await page.waitFor(5000);
-
             /**
              */
             let result = await page.evaluate(() => {
@@ -321,8 +319,27 @@ app.post('/check', urlencodedParser, function(req, res) {
 
             /**
              */
-            mts.ok = true;
-            mts.data = result;
+            try {
+                mts.ok = true;
+            
+                try {
+                    mts.title = result.split('header__subtitle">')[1].split('</div')[0];
+                } 
+                catch(e) {
+                    mts.title = e.message;
+                }
+
+                try {
+                    mts.error = result.split('b-content__title b-content__red"')[1].split("</div")[0];
+                }
+                catch(e) {
+                    mts.error = e.message;
+                }
+            }
+            catch(e) {
+                mts.ok = false;
+                mts.data = e.message;
+            }
         } 
         catch(e) {
             mts.ok = false;
