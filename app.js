@@ -313,7 +313,7 @@ app.post('/check', urlencodedParser, function(req, res) {
 
             /**
              */
-            await page.waitForFunction('(document.querySelector(\'body\').innerHTML.length > 0)', {
+            await page.waitForFunction('(document.title == "Кошелек МТС Деньги – удобный сервис для быстрых переводов и платежей")', {
                 timeout: 5000
             });
 
