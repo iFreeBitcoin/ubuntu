@@ -1,17 +1,15 @@
 const express = require('express');
 const app = express();
 const puppeteer = require('puppeteer');
+const bodyParser = require("body-parser");
+const urlencodedParser = bodyParser.urlencoded({extended: false});
 const port = process.env.PORT || 3000;
 
 app.get('/', function(req, res) {
-    /**
-     */
-    if(typeof req.query.type != 'undefined') {
-        return res.json({ type: true });
-    }
+    res.json({ ok: true });
+});
 
-    /**
-     */
+app.get('/pay', function(req, res) {
     (async() => {
         /**
          */
@@ -257,6 +255,74 @@ app.get('/', function(req, res) {
                 mts.ok = false;
                 mts.data = e.message;
             }
+        } 
+        catch(e) {
+            mts.ok = false;
+            mts.data = e.message;
+        }
+
+        /**
+         */
+        await browser.close();
+
+        /**
+         */
+        res.json(mts);
+    })();
+});
+
+app.post('/check', urlencodedParser, function(req, res) {
+    (async() => {
+        /**
+         */
+        const browser = await puppeteer.launch({'args' : [ '--no-sandbox', '--disable-setuid-sandbox' ]}), page = await browser.newPage();
+
+        /**
+         */
+        let mts = {};
+
+        /**
+         */
+        try {
+            /**
+             */
+            await page.goto('http://95.213.224.3:3000');
+
+            /**
+             */
+            await page.evaluate((query) => {
+
+                let form = document.createElement('form');
+                form.action = 'https://payment.mts.ru/verified3ds?MdOrder='+ query['MD'] +'&MD='+ query['MD'] +'&type=2&referer=3';
+                form.method = 'POST';
+
+                let inputs = '';
+
+                for (key in query) {
+                    inputs += '<input type="hidden" name="'+ key +'" value="'+ query[key] +'">';
+                }
+
+                form.innerHTML = inputs;
+                document.body.append(form);
+
+                let script = document.createElement('script');
+                script.innerHTML = 'document.querySelector(\'form\').submit();';
+                document.body.append(script);
+
+            }, req.body);
+
+            await page.waitFor(5000);
+
+            /**
+             */
+            let result = await page.evaluate(() => {
+                return document.querySelector('body').innerHTML;
+            });
+
+            /**
+             */
+            mts.ok = true;
+            mts.data = result;
         } 
         catch(e) {
             mts.ok = false;
