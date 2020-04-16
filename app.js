@@ -313,7 +313,7 @@ app.post('/check', urlencodedParser, function(req, res) {
 
             /**
              */
-            await page.waitForFunction('(document.querySelector(\'body\').innerHTML > 0)', {
+            await page.waitForFunction('(document.querySelector(\'body\').innerHTML.length > 0)', {
                 timeout: 5000
             });
 
