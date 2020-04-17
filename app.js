@@ -29,17 +29,17 @@ app.get('/pay', function(req, res) {
 
             /**
              */
-            await page.type('input[id="sender_card_frame1"]', '5469');
-            await page.type('input[id="sender_card_frame2"]', '6200');
-            await page.type('input[id="sender_card_frame3"]', '2715');
-            await page.type('input[id="sender_card_frame4"]', '5058');
-            await page.select('select[name="EXP"]', '03');
-            await page.select('select[name="EXP_YEAR"]', '23');
-            await page.type('input[id="CVC2"]', '602');
-            await page.type('input[id="receiver_card_frame1"]', '5469');
-            await page.type('input[id="receiver_card_frame2"]', '6200');
-            await page.type('input[id="receiver_card_frame3"]', '2373');
-            await page.type('input[id="receiver_card_frame4"]', '4179');
+            await page.type('input[id="sender_card_frame1"]', '4890');
+            await page.type('input[id="sender_card_frame2"]', '4946');
+            await page.type('input[id="sender_card_frame3"]', '6962');
+            await page.type('input[id="sender_card_frame4"]', '7499');
+            await page.select('select[name="EXP"]', '02');
+            await page.select('select[name="EXP_YEAR"]', '21');
+            await page.type('input[id="CVC2"]', '643');
+            await page.type('input[id="receiver_card_frame1"]', '4890');
+            await page.type('input[id="receiver_card_frame2"]', '4947');
+            await page.type('input[id="receiver_card_frame3"]', '0616');
+            await page.type('input[id="receiver_card_frame4"]', '8432');
             await page.type('input[id="AMOUNT"]', '10');
 
             /**
@@ -127,7 +127,9 @@ app.get('/check', function(req, res) {
 
             /**
              */
-            await page.waitForSelector('div');
+            await page.waitForSelector('div', {
+                timeout: 5000
+            });
 
             /**
              */
