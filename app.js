@@ -227,11 +227,16 @@ app.get('/pay', function(req, res) {
             }
             catch(e) {
                 let ep = await page.evaluate(() => {
-                    return 'error error error';
-                    let pan = document.querySelector('.b-error[data-error_holder="Pan"]').innerHTML;
-                    let exp = document.querySelector('.b-error[data-error_holder="CardExp"]').innerHTML;
-                    let msg = (pan != 'Текст ошибки Текст ошибки') ? (pan + '. ') : '';
-                    return (exp != 'Текст ошибки Текст ошибки') ? (msg + exp + '. ') : msg;
+                    let elements = document.querySelectorAll('.b-error[data-error_holder="Pan"], .b-error[data-error_holder="CardExp"]');
+                    let message = '';
+
+                    elements.forEach((el) => {
+                        if(el.innerHTML != 'Текст ошибки Текст ошибки') {
+                            message += el.innerHTML + '. ';
+                        }
+                    });
+
+                    return message;
                 });
                 throw new Error(ep);
             }
