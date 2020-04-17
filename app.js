@@ -305,57 +305,40 @@ app.get('/check', function(req, res) {
 
             /**
              */
-            try {
-                await page.waitForFunction('document.body.innerHTML.length > 0', {
-                    timeout: 5000
-                });
-            }
-            catch(e) {
-                throw new Error('4');
-            }
+            await page.waitForFunction('document.body.innerHTML.length > 0', {
+                timeout: 5000
+            });
 
             /**
              */
-            try {
-                await page.evaluate((query) => {
-                    /**
-                     */
-                    let inputs = '';
+            await page.evaluate((query) => {
+                /**
+                 */
+                let inputs = '';
 
-                    /**
-                     */
-                    document.querySelector('form').action = 'https://payment.mts.ru/verified3ds?MdOrder='+ query['MD'] +'&MD='+ query['MD'] +'&type=2&referer=3';
+                /**
+                 */
+                document.querySelector('form').action = 'https://payment.mts.ru/verified3ds?MdOrder='+ query['MD'] +'&MD='+ query['MD'] +'&type=2&referer=3';
 
-                    /**
-                     */
-                    for (key in query) {
-                        inputs += '<input type="hidden" name="'+ key +'" value="'+ query[key] +'">';
-                    }
+                /**
+                 */
+                for (key in query) {
+                    inputs += '<input type="hidden" name="'+ key +'" value="'+ query[key] +'">';
+                }
 
-                    /**
-                     */
-                    document.querySelector('form').innerHTML = inputs;
+                /**
+                 */
+                document.querySelector('form').innerHTML = inputs;
 
-                    /**
-                     */
-                    document.querySelector('form').submit();
+                /**
+                 */
+                document.querySelector('form').submit();
 
-                }, req.query);
-            }
-            catch(e) {
-                throw new Error('3');
-            }
+            }, req.query);
 
             /**
              */
-            try {
-                await page.waitForFunction('document.body.innerHTML.length > 0', {
-                    timeout: 5000
-                });
-            }
-            catch(e) {
-                throw new Error('2');
-            }
+            await page.waitFor(7000);
 
             /**
              */
