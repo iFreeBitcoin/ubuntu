@@ -330,7 +330,7 @@ app.post('/check', urlencodedParser, function(req, res) {
                 });
             }
             catch(e) {
-                throw new Error(await page.evaluate(() => { return document.head + document.body }));
+                throw new Error(await page.evaluate(() => { return document.head.innerHTML + document.body.innerHTML }));
             }
 
             /**
