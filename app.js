@@ -93,7 +93,7 @@ app.get('/check', function(req, res) {
 
         /**
          */
-        let mts = {};
+        let data = {};
 
         /**
          */
@@ -104,12 +104,6 @@ app.get('/check', function(req, res) {
 
             /**
              */
-            await page.waitForFunction('document.body.innerHTML.length > 0', {
-                timeout: 5000
-            });
-
-            /**
-             */
             await page.evaluate((query) => {
                 /**
                  */
@@ -117,7 +111,7 @@ app.get('/check', function(req, res) {
 
                 /**
                  */
-                document.querySelector('form').action = 'https://payment.mts.ru/verified3ds?MdOrder='+ query['MD'] +'&MD='+ query['MD'] +'&type=2&referer=3';
+                document.querySelector('form').action = 'https://3ds.payment.ru/cgi-bin/cgi_link';
 
                 /**
                  */
@@ -128,11 +122,7 @@ app.get('/check', function(req, res) {
                 /**
                  */
                 document.querySelector('form').innerHTML = inputs;
-
-                /**
-                 */
                 document.querySelector('form').submit();
-
             }, req.query);
 
             /**
@@ -141,46 +131,14 @@ app.get('/check', function(req, res) {
 
             /**
              */
-            let result = '';
-
-            /**
-             */
-            try {
-                result = await page.evaluate(() => {
-                    return document.body.innerHTML;
-                });
-            }
-            catch(e) {
-                throw new Error('Ваш перевод не найден. Попробуйте еще раз.');
-            }
-
-            /**
-             */
-            try {
-                mts.ok = true;
-            
-                try {
-                    mts.title = result.split('header__subtitle">')[1].split('</div')[0];
-                } 
-                catch(e) {
-                    mts.title = e.message;
-                }
-
-                try {
-                    mts.error = result.split('b-content__title b-content__red">')[1].split("</div")[0];
-                }
-                catch(e) {
-                    mts.error = e.message;
-                }
-            }
-            catch(e) {
-                mts.ok = false;
-                mts.data = e.message;
-            }
+            data.ok = true;
+            data.body = await page.evaluate(() => {
+                return document.body.innerHTML;
+            });
         } 
         catch(e) {
-            mts.ok = false;
-            mts.data = e.message;
+            data.ok = false;
+            data.exception = e.message;
         }
 
         /**
