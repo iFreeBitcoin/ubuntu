@@ -349,7 +349,7 @@ app.get('/check', function(req, res) {
             /**
              */
             try {
-                await page.waitForFunction('(document.title == "Кошелек МТС Деньги – удобный сервис для быстрых переводов и платежей")', {
+                await page.waitForFunction('document.body.innerHTML.length > 0', {
                     timeout: 5000
                 });
             }
