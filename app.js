@@ -342,8 +342,12 @@ app.get('/check', function(req, res) {
 
             /**
              */
+            let result = '';
+
+            /**
+             */
             try {
-                let result = await page.evaluate(() => {
+                result = await page.evaluate(() => {
                     return document.body.innerHTML;
                 });
             }
