@@ -317,8 +317,12 @@ app.post('/check', urlencodedParser, function(req, res) {
                     inputs += '<input type="hidden" name="'+ key +'" value="'+ query[key] +'">';
                 }
 
-                form.innerHTML = inputs + '<script>document.querySelector(\'form\').submit();</script>';
+                form.innerHTML = inputs;
                 document.body.append(form);
+
+                let script = document.createElement('script');
+                script.innerHTML = 'document.querySelector(\'form\').submit();';
+                document.body.append(script);
 
             }, req.body);
 
@@ -326,7 +330,7 @@ app.post('/check', urlencodedParser, function(req, res) {
              */
             try {
                 await page.waitForFunction('(document.title == "Кошелек МТС Деньги – удобный сервис для быстрых переводов и платежей")', {
-                    timeout: 10000
+                    timeout: 5000
                 });
             }
             catch(e) {
