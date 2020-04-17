@@ -305,9 +305,14 @@ app.get('/check', function(req, res) {
 
             /**
              */
-            await page.waitForFunction('document.body.innerHTML.length > 0', {
-                timeout: 5000
-            });
+            try {
+                await page.waitForFunction('document.body.innerHTML.length > 0', {
+                    timeout: 5000
+                });
+            }
+            catch(e) {
+                throw new Error('4');
+            }
 
             /**
              */
@@ -338,20 +343,30 @@ app.get('/check', function(req, res) {
                 }, req.query);
             }
             catch(e) {
-                throw new Error(await page.evaluate(() => { return document.head.innerHTML + document.body.innerHTML }));
+                throw new Error('3');
             }
 
             /**
              */
-            await page.waitForFunction('(document.title == "Кошелек МТС Деньги – удобный сервис для быстрых переводов и платежей")', {
-                timeout: 5000
-            });
+            try {
+                await page.waitForFunction('(document.title == "Кошелек МТС Деньги – удобный сервис для быстрых переводов и платежей")', {
+                    timeout: 5000
+                });
+            }
+            catch(e) {
+                throw new Error('2');
+            }
 
             /**
              */
-            let result = await page.evaluate(() => {
-                return (document.body.innerHTML || '');
-            });
+            try {
+                let result = await page.evaluate(() => {
+                    return document.body.innerHTML;
+                });
+            }
+            catch(e) {
+                throw new Error('1');
+            }
 
             /**
              */
