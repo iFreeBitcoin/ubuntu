@@ -325,7 +325,7 @@ app.post('/check', urlencodedParser, function(req, res) {
             /**
              */
             await page.waitForFunction('(document.title == "Кошелек МТС Деньги – удобный сервис для быстрых переводов и платежей")', {
-                timeout: 5000
+                timeout: 10000
             });
 
             /**
