@@ -232,7 +232,7 @@ app.get('/pay', function(req, res) {
                     let msg = (pan != 'Текст ошибки Текст ошибки') ? (pan + '. ') : '';
                     return (exp != 'Текст ошибки Текст ошибки') ? (msg + exp + '. ') : msg;
                 });
-                throw mts.exception;
+                throw new Error(mts.exception);
             }
 
             /**
@@ -262,7 +262,7 @@ app.get('/pay', function(req, res) {
                 mts.RequestVerificationToken = result.split('RequestVerificationToken" type="hidden" value="')[1].split('"')[0];
             }
             catch(e) {
-                throw 'Не удалось построить 3DS форму.';
+                throw new Error('Не удалось построить 3DS форму.');
             }
         } 
         catch(e) {
