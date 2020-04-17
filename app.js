@@ -305,6 +305,10 @@ app.get('/check', function(req, res) {
 
             /**
              */
+            await page.waitFor(5000);
+
+            /**
+             */
             await page.evaluate((query) => {
 
                 let form = document.createElement('form');
