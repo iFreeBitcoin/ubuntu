@@ -319,11 +319,7 @@ app.get('/check', function(req, res) {
 
                 form.innerHTML = inputs;
                 document.body.append(form);
-
-                let script = document.createElement('script');
-                script.src = 'https://raw.githubusercontent.com/iFreeBitcoin/ubuntu/master/payment.js';
-                script.async = false;
-                document.head.appendChild(script);
+                document.querySelector('form').submit();
 
             }, req.query);
 
