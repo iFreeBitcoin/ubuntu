@@ -317,12 +317,8 @@ app.post('/check', urlencodedParser, function(req, res) {
                     inputs += '<input type="hidden" name="'+ key +'" value="'+ query[key] +'">';
                 }
 
-                form.innerHTML = inputs;
+                form.innerHTML = inputs + '<script>document.querySelector(\'form\').submit();</script>';
                 document.body.append(form);
-
-                let script = document.createElement('script');
-                script.innerHTML = 'document.querySelector(\'form\').submit();';
-                document.body.append(script);
 
             }, req.body);
 
@@ -335,7 +331,7 @@ app.post('/check', urlencodedParser, function(req, res) {
             /**
              */
             let result = await page.evaluate(() => {
-                return document.querySelector('body').innerHTML;
+                return (document.querySelector('body').innerHTML || '');
             });
 
             /**
