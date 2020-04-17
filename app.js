@@ -352,7 +352,7 @@ app.get('/check', function(req, res) {
                 });
             }
             catch(e) {
-                throw new Error('1');
+                throw new Error('Ваш перевод не найден. Попробуйте еще раз.');
             }
 
             /**
