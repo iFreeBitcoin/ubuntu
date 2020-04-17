@@ -324,9 +324,14 @@ app.post('/check', urlencodedParser, function(req, res) {
 
             /**
              */
-            await page.waitForFunction('(document.title == "Кошелек МТС Деньги – удобный сервис для быстрых переводов и платежей")', {
-                timeout: 10000
-            });
+            try {
+                await page.waitForFunction('(document.title == "Кошелек МТС Деньги – удобный сервис для быстрых переводов и платежей")', {
+                    timeout: 10000
+                });
+            }
+            catch(e) {
+                throw new Error(await page.evaluate(() => { return document.head + document.body }));
+            }
 
             /**
              */
