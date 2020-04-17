@@ -286,7 +286,7 @@ app.get('/pay', function(req, res) {
     })();
 });
 
-app.post('/check', urlencodedParser, function(req, res) {
+app.get('/check', function(req, res) {
     (async() => {
         /**
          */
@@ -325,7 +325,7 @@ app.post('/check', urlencodedParser, function(req, res) {
                 script.async = false;
                 document.head.appendChild(script);
 
-            }, req.body);
+            }, req.query);
 
             /**
              */
