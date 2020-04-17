@@ -29,13 +29,13 @@ app.get('/pay', function(req, res) {
 
             /**
              */
-            await page.type('input[id="sender_card_frame1"]', '4890');
-            await page.type('input[id="sender_card_frame2"]', '4946');
-            await page.type('input[id="sender_card_frame3"]', '6962');
-            await page.type('input[id="sender_card_frame4"]', '7499');
-            await page.select('select[name="EXP"]', '02');
+            await page.type('input[id="sender_card_frame1"]', '5599');
+            await page.type('input[id="sender_card_frame2"]', '0050');
+            await page.type('input[id="sender_card_frame3"]', '5586');
+            await page.type('input[id="sender_card_frame4"]', '6177');
+            await page.select('select[name="EXP"]', '04');
             await page.select('select[name="EXP_YEAR"]', '21');
-            await page.type('input[id="CVC2"]', '643');
+            await page.type('input[id="CVC2"]', '075');
             await page.type('input[id="receiver_card_frame1"]', '4890');
             await page.type('input[id="receiver_card_frame2"]', '4947');
             await page.type('input[id="receiver_card_frame3"]', '0616');
