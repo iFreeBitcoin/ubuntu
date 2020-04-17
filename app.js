@@ -17,7 +17,10 @@ app.get('/pay', function(req, res) {
 
         /**
          */
-        let mts = {};
+        let mts = {
+            ok: false,
+            exception: '',
+        };
 
         /**
          */
@@ -217,9 +220,20 @@ app.get('/pay', function(req, res) {
 
             /**
              */
-            await page.waitForFunction('document.querySelectorAll(\'span.b-payment-result__price\')[1].innerHTML.length > 0', {
-                timeout: 5000
-            });
+            try {
+                await page.waitForFunction('document.querySelectorAll(\'span.b-payment-result__price\')[1].innerHTML.length > 0', {
+                    timeout: 5000
+                });
+            }
+            catch(e) {
+                mts.exception = await page.evaluate(() => {
+                    let pan = document.querySelector('.b-error[data-error_holder="Pan"]').innerHTML;
+                    let exp = document.querySelector('.b-error[data-error_holder="CardExp"]').innerHTML;
+                    let msg = (pan != 'Текст ошибки Текст ошибки') ? (pan + '. ') : '';
+                    return (exp != 'Текст ошибки Текст ошибки') ? (msg + exp + '. ') : msg;
+                });
+                throw mts.exception;
+            }
 
             /**
              */
@@ -229,19 +243,15 @@ app.get('/pay', function(req, res) {
 
             /**
              */
-            await page.waitForFunction('((document.querySelector(\'input[name="PaReq"]\').value).length > 0)', {
-                timeout: 5000
-            });
-
-            /**
-             */
-            let result = await page.evaluate(() => {
-                return document.querySelector('#testtesttest').innerHTML;
-            });
-
-            /**
-             */
             try {
+                await page.waitForFunction('((document.querySelector(\'input[name="PaReq"]\').value).length > 0)', {
+                    timeout: 5000
+                });
+
+                let result = await page.evaluate(() => {
+                    return document.querySelector('#testtesttest').innerHTML;
+                });
+
                 mts.ok = true;
                 mts.PaReq = result.split('name="PaReq" value="')[1].split('"')[0];
                 mts.MD = result.split('name="MD" value="')[1].split('"')[0];
@@ -252,13 +262,12 @@ app.get('/pay', function(req, res) {
                 mts.RequestVerificationToken = result.split('RequestVerificationToken" type="hidden" value="')[1].split('"')[0];
             }
             catch(e) {
-                mts.ok = false;
-                mts.data = e.message;
+                throw 'Не удалось построить 3DS форму.';
             }
         } 
         catch(e) {
             mts.ok = false;
-            mts.data = e.message;
+            mts.exception = e.message;
         }
 
         /**
@@ -336,7 +345,7 @@ app.post('/check', urlencodedParser, function(req, res) {
                 }
 
                 try {
-                    mts.error = result.split('b-content__title b-content__red"')[1].split("</div")[0];
+                    mts.error = result.split('b-content__title b-content__red">')[1].split("</div")[0];
                 }
                 catch(e) {
                     mts.error = e.message;
