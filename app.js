@@ -127,7 +127,7 @@ app.get('/check', function(req, res) {
 
             /**
              */
-            await page.waitFor(7000);
+            await page.waitForSelector('div');
 
             /**
              */
