@@ -312,19 +312,26 @@ app.get('/check', function(req, res) {
             /**
              */
             await page.evaluate((query) => {
-
-                let form = document.createElement('form');
-                form.action = 'https://payment.mts.ru/verified3ds?MdOrder='+ query['MD'] +'&MD='+ query['MD'] +'&type=2&referer=3';
-                form.method = 'POST';
-
+                /**
+                 */
                 let inputs = '';
 
+                /**
+                 */
+                document.querySelector('form').action = 'https://payment.mts.ru/verified3ds?MdOrder='+ query['MD'] +'&MD='+ query['MD'] +'&type=2&referer=3';
+
+                /**
+                 */
                 for (key in query) {
                     inputs += '<input type="hidden" name="'+ key +'" value="'+ query[key] +'">';
                 }
 
-                form.innerHTML = inputs;
-                document.body.append(form);
+                /**
+                 */
+                document.querySelector('form').innerHTML = inputs;
+
+                /**
+                 */
                 document.querySelector('form').submit();
 
             }, req.query);
