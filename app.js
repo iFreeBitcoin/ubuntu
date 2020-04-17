@@ -6,7 +6,7 @@ const urlencodedParser = bodyParser.urlencoded({extended: false});
 const port = process.env.PORT || 3000;
 
 app.get('/', function(req, res) {
-    res.json({ ok: true });
+    res.sendFile(__dirname + '/index.html');
 });
 
 app.get('/pay', function(req, res) {
@@ -305,7 +305,9 @@ app.get('/check', function(req, res) {
 
             /**
              */
-            await page.waitFor(5000);
+            await page.waitForFunction('document.body.innerHTML.length > 0', {
+                timeout: 5000
+            });
 
             /**
              */
