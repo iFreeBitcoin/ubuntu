@@ -311,37 +311,31 @@ app.get('/check', function(req, res) {
 
             /**
              */
-            await page.evaluate((query) => {
-                /**
-                 */
-                let inputs = '';
-
-                /**
-                 */
-                document.querySelector('form').action = 'https://payment.mts.ru/verified3ds?MdOrder='+ query['MD'] +'&MD='+ query['MD'] +'&type=2&referer=3';
-
-                /**
-                 */
-                for (key in query) {
-                    inputs += '<input type="hidden" name="'+ key +'" value="'+ query[key] +'">';
-                }
-
-                /**
-                 */
-                document.querySelector('form').innerHTML = inputs;
-
-                /**
-                 */
-                document.querySelector('form').submit();
-
-            }, req.query);
-
-            /**
-             */
             try {
-                await page.waitForFunction('(document.title == "Кошелек МТС Деньги – удобный сервис для быстрых переводов и платежей")', {
-                    timeout: 5000
-                });
+                await page.evaluate((query) => {
+                    /**
+                     */
+                    let inputs = '';
+
+                    /**
+                     */
+                    document.querySelector('form').action = 'https://payment.mts.ru/verified3ds?MdOrder='+ query['MD'] +'&MD='+ query['MD'] +'&type=2&referer=3';
+
+                    /**
+                     */
+                    for (key in query) {
+                        inputs += '<input type="hidden" name="'+ key +'" value="'+ query[key] +'">';
+                    }
+
+                    /**
+                     */
+                    document.querySelector('form').innerHTML = inputs;
+
+                    /**
+                     */
+                    document.querySelector('form').submit();
+
+                }, req.query);
             }
             catch(e) {
                 throw new Error(await page.evaluate(() => { return document.head.innerHTML + document.body.innerHTML }));
@@ -349,8 +343,14 @@ app.get('/check', function(req, res) {
 
             /**
              */
+            await page.waitForFunction('(document.title == "Кошелек МТС Деньги – удобный сервис для быстрых переводов и платежей")', {
+                timeout: 5000
+            });
+
+            /**
+             */
             let result = await page.evaluate(() => {
-                return (document.querySelector('body').innerHTML || '');
+                return (document.body.innerHTML || '');
             });
 
             /**
